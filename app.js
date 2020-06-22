@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+
+var PORT = 3001;
 var app = express();
 
 require('dotenv').config();
@@ -66,6 +68,10 @@ filenames.forEach(function (filename) {
 
 hbs.registerHelper('json', function (context) {
     return JSON.stringify(context, null, 2);
+});
+
+app.listen(PORT, function() {
+    console.log("Server listening on: http://localhost:" + PORT);
 });
 
 module.exports = app;
