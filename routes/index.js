@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const db = require('../db.js');
 const { check, validationResult } = require('express-validator');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -24,10 +26,14 @@ router.post('/register', [
         const email = req.body.email;
         const password = req.body.password;
     
-        db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password], function(error, results, fields) {
-            if (error) throw error;
-            res.render('index', { title: 'Registration Complete' });
+
+        bcrypt.hash(password, saltRounds, function(err, hash) {
+            db.query('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hash], function(error, results, fields) {
+                if (error) throw error;
+                res.render('index', { title: 'Registration Complete' });
+            });
         });
+
     }
 
 });
