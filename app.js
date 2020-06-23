@@ -5,6 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+// Auth packages
+const session = require('express-session');
+const passport = require('passport');
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
@@ -25,6 +29,16 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// returns cookie to user that can be used with passport
+app.use(session({
+    secret: 'sdjkfhakdjsfh', // random string
+    resave: false, // should session be updated even if no change made? session only saved when change is made
+    saveUninitialized: false, // if cookie should be generated before user is logged in 
+    // cookie: { secure: true } // if https should be enabled
+}))
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
