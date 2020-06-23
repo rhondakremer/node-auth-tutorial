@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 // Auth packages
 const session = require('express-session');
 const passport = require('passport');
+const MySQLStore = require('express-mysql-session')(session);
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -30,9 +31,19 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var options = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database : process.env.DB_NAME
+};
+
+var sessionStore = new MySQLStore(options);
+
 // returns cookie to user that can be used with passport
 app.use(session({
     secret: 'sdjkfhakdjsfh', // random string
+    store: sessionStore,
     resave: false, // should session be updated even if no change made? session only saved when change is made
     saveUninitialized: false, // if cookie should be generated before user is logged in 
     // cookie: { secure: true } // if https should be enabled
