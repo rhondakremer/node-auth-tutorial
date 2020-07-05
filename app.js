@@ -7,8 +7,9 @@ var bodyParser = require('body-parser');
 
 // Auth packages
 const session = require('express-session');
-const passport = require('passport');
+const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;;
 const MySQLStore = require('express-mysql-session')(session);
+const bcrypt = require('bcrypt');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -53,6 +54,30 @@ app.use(passport.session());
 
 app.use('/', index);
 app.use('/users', users);
+
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        console.log("app.js", username, password)
+        const db = require('./db');
+
+        db.query('SELECT id, password FROM users WHERE username = ?', [username], function(err, results, fields) {
+            if (err) { return done(err) };
+            console.log("res", results.length)
+            if (results.length === 0) {
+                return done(null ,false);
+            }
+            const hash = results[0].password.toString();
+            bcrypt.compare(password, hash, function(err, response) {
+                if (response === true) {
+                    console.log("yes")
+                    return done(null, {user_id: results[0].id})
+                } else {
+                    return done(null, false);
+                }
+            })
+        })
+    }
+));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

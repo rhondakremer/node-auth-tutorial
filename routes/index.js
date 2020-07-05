@@ -23,6 +23,11 @@ router.get('/login', function(req, res) {
     res.render('login', { title: 'Login' })
 })
 
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/profile', // if successful authentication
+    failureRedirect: 'login' // if failed authentication
+}))
+
 router.get('/register', function(req, res, next) {
     res.render('index', { title: 'Registration' });
 });

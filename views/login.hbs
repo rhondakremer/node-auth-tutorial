@@ -1,8 +1,23 @@
 {{> header }}
 
 <div class="container">
-    <h2>Profile</h2>
-    skdfhjalsjkdfhaksdjfhaslkdfhasldk
-    this will be the login page lol
-    <p>i can'tsee shit because everything is not cool</p>
+
+    <h1>{{title}}</h1>
+    {{#each errors}}
+        <p>{{this.msg}}</p>
+    {{/each}}
+    <form method="POST" action="/login">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+
 </div>
+{{> footer-end }}
