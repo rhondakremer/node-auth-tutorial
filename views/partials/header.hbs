@@ -29,15 +29,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
+                {{#if isAuthenticated}}
                 <li class="nav-item">
                     <a class="nav-link" href="/profile" tabindex="-1">Profile</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/logout" tabindex="-1">Logout</a>
+                </li>
+                {{else}}
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/login" tabindex="-1">Login</a>
                 </li>
+                {{/if}}
             </ul>
         </div>
     </nav>

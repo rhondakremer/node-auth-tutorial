@@ -28,6 +28,12 @@ router.post('/login', passport.authenticate('local', {
     failureRedirect: 'login' // if failed authentication
 }))
 
+router.get('/logout', function(req, res) {
+    req.logout();
+    req.session.destroy();
+    res.redirect('/');
+})
+
 router.get('/register', function(req, res, next) {
     res.render('index', { title: 'Registration' });
 });
